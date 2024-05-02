@@ -1,0 +1,41 @@
+version: "3.1"
+
+services:
+
+  dragon-mailer:
+    image: bejam/drag:1
+    restart: always
+    container_name: base-done
+    depends_on:
+      - mysql
+    ports:
+      - 79:80
+    networks:
+      - dragon-mailer-network
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql-done
+    ports:
+      - 3390:3306
+    networks:
+      - dragon-mailer-network
+    environment:
+      MYSQL_ROOT_USERNAME: admin
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: newblog
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    container_name: phpmyadmin-done
+    ports:
+      - 8085:80
+    environment:
+      PMA_PASSWORD: password
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+networks:
+  dragon-mailer-network:
+    driver: bridge
